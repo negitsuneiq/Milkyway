@@ -432,7 +432,7 @@ h2 {
   background: transparent;
   font-size: 11px;
   padding: 9px 18px;
-  min-height: 38px;
+  min-height: 44px;
   border-radius: 2px;
 }
 .segmented button[aria-pressed="true"] {
@@ -2072,4 +2072,14 @@ body.modal-open {
 }
 .hero-visual {
   overflow: hidden;
+}
+
+/* Keep model controls adjacent to the canvas, ahead of the detail card. */
+.atlas-top + .body-browser {
+  border-top: 0;
+  border-bottom: 1px solid var(--line);
+}
+.orbit-panel > .atlas-controls {
+  flex-wrap: wrap;
+  row-gap: 4px;
 }

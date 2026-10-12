@@ -53,6 +53,37 @@ const engines = process.env.TEST_ENGINE
         );
       }
       await page.setViewportSize({ width: 390, height: 664 });
+      const controls = await page.evaluate(() => {
+        const rect = (selector) =>
+          document.querySelector(selector).getBoundingClientRect();
+        return {
+          pickerBeforeCanvas: rect(".body-browser").bottom <= rect("#orr").top,
+          controlsBeforeDetail:
+            rect(".atlas-controls").bottom <= rect(".body-detail").top,
+          smallButtons: [...document.querySelectorAll("button")]
+            .filter(
+              (button) =>
+                button.getBoundingClientRect().width > 0 &&
+                button.getBoundingClientRect().height < 44,
+            )
+            .map((button) => button.id || button.textContent.trim()),
+        };
+      });
+      assert.equal(
+        controls.pickerBeforeCanvas,
+        true,
+        "Choose a body before reaching the canvas",
+      );
+      assert.equal(
+        controls.controlsBeforeDetail,
+        true,
+        "Time controls precede the long mobile detail card",
+      );
+      assert.deepEqual(
+        controls.smallButtons,
+        [],
+        "Visible buttons have 44px touch targets",
+      );
       const model = page.locator("#orr");
       await model.scrollIntoViewIfNeeded();
       await page.locator("#pp").click();

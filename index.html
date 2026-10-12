@@ -150,6 +150,27 @@
               ><span id="model-status">HAREKETLİ MODEL</span></span
             >
           </div>
+          <div class="body-browser">
+            <div
+              class="filter-controls"
+              role="group"
+              aria-label="Gök cismi kategorisi"
+            >
+              <button data-filter="planet" aria-pressed="true">
+                Gezegenler <span>08</span></button
+              ><button data-filter="dwarf" aria-pressed="false">
+                Cüce gezegenler <span>05</span></button
+              ><button data-filter="moon" aria-pressed="false">
+                Uydular <span>12</span>
+              </button>
+            </div>
+            <div
+              id="picker"
+              class="picker"
+              role="group"
+              aria-label="Gök cismi seç"
+            ></div>
+          </div>
           <div class="atlas-content">
             <div class="orbit-panel">
               <div class="orbit-heading">
@@ -171,9 +192,9 @@
               <canvas
                 id="orr"
                 tabindex="0"
-                aria-label="Etkileşimli yörünge modeli. Cisim seçmek için aşağıdaki düğmeleri veya sağ ve sol ok tuşlarını kullan."
+                aria-label="Etkileşimli yörünge modeli. Cisim seçim düğmelerini veya sağ ve sol ok tuşlarını kullan."
                 aria-describedby="model-note"
-                >Modeldeki cisimleri aşağıdaki seçim düğmelerinden
+                >Modeldeki cisimleri seçim düğmelerinden
                 keşfedebilirsin.</canvas
               >
               <div class="orbit-legend">
@@ -183,6 +204,25 @@
                 ><span id="dwarf-legend"
                   ><i class="legend-line dashed"></i> Cüce gezegen</span
                 ><span id="orbit-hint">Bir cisme dokun ↗</span>
+              </div>
+              <div class="atlas-controls">
+                <button id="pp" class="pause-button" aria-pressed="false">
+                  <span aria-hidden="true">Ⅱ</span> Duraklat
+                </button>
+                <div
+                  class="speed-controls"
+                  role="group"
+                  aria-label="Simülasyon hızı"
+                >
+                  <button data-speed="slow" aria-pressed="false">Yavaş</button
+                  ><button data-speed="normal" aria-pressed="true">
+                    Normal</button
+                  ><button data-speed="fast" aria-pressed="false">Hızlı</button>
+                </div>
+                <span id="speed-label">1 sn = 30 gün</span
+                ><output id="clock" aria-label="Modelde geçen süre"
+                  >0 gün</output
+                >
               </div>
             </div>
             <aside class="body-detail" aria-labelledby="pname">
@@ -222,43 +262,6 @@
               </button>
               <p class="detail-fact" id="pfact"></p>
             </aside>
-          </div>
-          <div class="atlas-controls">
-            <button id="pp" class="pause-button" aria-pressed="false">
-              <span aria-hidden="true">Ⅱ</span> Duraklat
-            </button>
-            <div
-              class="speed-controls"
-              role="group"
-              aria-label="Simülasyon hızı"
-            >
-              <button data-speed="slow" aria-pressed="false">Yavaş</button
-              ><button data-speed="normal" aria-pressed="true">Normal</button
-              ><button data-speed="fast" aria-pressed="false">Hızlı</button>
-            </div>
-            <span id="speed-label">1 sn = 30 gün</span
-            ><output id="clock" aria-label="Modelde geçen süre">0 gün</output>
-          </div>
-          <div class="body-browser">
-            <div
-              class="filter-controls"
-              role="group"
-              aria-label="Gök cismi kategorisi"
-            >
-              <button data-filter="planet" aria-pressed="true">
-                Gezegenler <span>08</span></button
-              ><button data-filter="dwarf" aria-pressed="false">
-                Cüce gezegenler <span>05</span></button
-              ><button data-filter="moon" aria-pressed="false">
-                Uydular <span>12</span>
-              </button>
-            </div>
-            <div
-              id="picker"
-              class="picker"
-              role="group"
-              aria-label="Gök cismi seç"
-            ></div>
           </div>
         </div>
         <p class="model-note" id="model-note">

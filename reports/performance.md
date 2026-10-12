@@ -75,3 +75,11 @@ Yayın öncesi gerçek cihazda yapılacaklar:
 5. Uzun süre kullanımda belleği, resim büyütme/kapatmayı ve arka plan sekmesinden dönüşü gözle.
 
 Çalışan uygulamaya yeni üçüncü taraf JavaScript kütüphanesi eklenmedi. Test araçları yalnızca geliştirme ortamında kullanılıyor.
+
+## 12 Ekim: son mobil kullanım düzenlemesi
+
+Cisim seçici çizimin üstüne, duraklatma ve hız kontrolleri çizimin hemen altına taşındı. Mobilde uzun bilgi kartını geçmeden model kullanılabiliyor; DOM ve klavye sırası da görsel sırayla aynı. Görünüm düğmeleri 44 px yüksekliğe çıkarıldı. Testlere kontrol sırası ve görünür düğmelerin minimum dokunma yüksekliği kontrolleri eklendi.
+
+Plüton–Charon görünümünde küre çapları, ortak kütle merkezi işaretinin tüm yörünge açıları ve ekran genişliklerinde Plüton’un dışında kalacağı biçimde ayarlandı; iki cismin çap oranı bu görünümde korunuyor. Başlangıç konumu ve mesafe şematik olmaya devam ediyor. Önizlemeler son düzeni gösteriyor; modül görüntülerinde üst gezinme çubuğu kırpma dışı bırakılmıştır.
+
+Bu son düzenlemeden sonra Chromium ve WebKit testlerinin tamamı tekrar geçti. Üç yeni mobil Lighthouse koşusu **95, 94, 96** verdi; medyan **95** kaldı. Erişilebilirlik, iyi uygulamalar ve SEO her koşuda **100**. Son medyanlar: FCP **1,73 sn**, LCP **2,25 sn**, TBT **190 ms**, CLS **0.00022**. Son kontrol kayıtları: [final-lighthouse-summary.json](final-lighthouse-summary.json).

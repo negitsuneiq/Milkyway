@@ -464,7 +464,7 @@
     ctx.drawImage(backdrop, 0, 0, width, height);
     positions = plotted.map((body, index) => {
       const p = point(body, index);
-      const r =
+      let r =
         index === 0
           ? view === "solar"
             ? 14
@@ -474,6 +474,15 @@
             : body.kind === "dwarf"
               ? 3.5
               : Math.max(4, Math.min(9, body.diameter / 15000 + 3));
+      if (view === "moons" && host === "pluto") {
+        // Keep the barycentre visibly outside Pluto at every projected angle.
+        // Other system sizes are schematic; this pair preserves its diameter ratio.
+        const plutoRadius = Math.min(18, pathRadii[1] * 0.1085 * flatten * 0.6);
+        r =
+          index === 0
+            ? plutoRadius
+            : plutoRadius * (body.diameter / byId.get("pluto").diameter);
+      }
       if (!index && view === "solar") {
         const glow = ctx.createRadialGradient(p.x, p.y, 6, p.x, p.y, 42);
         glow.addColorStop(0, "#f0b46930");
