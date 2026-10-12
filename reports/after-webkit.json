@@ -1,0 +1,35 @@
+{
+  "url": "http://127.0.0.1:8000",
+  "engine": "webkit",
+  "browserVersion": "27.2",
+  "device": "iPhone 13 emulation / Linux",
+  "viewport": {
+    "width": 390,
+    "height": 664
+  },
+  "samples": {
+    "model": {
+      "sampleSeconds": 3,
+      "callbacks": 185,
+      "callbackMsPerSecond": 7.32,
+      "p95CallbackMs": 1,
+      "over16ms": 0
+    },
+    "globe": {
+      "sampleSeconds": 3.02,
+      "callbacks": 184,
+      "callbackMsPerSecond": 38.46,
+      "p95CallbackMs": 2,
+      "over16ms": 0
+    },
+    "offscreen": {
+      "sampleSeconds": 3,
+      "callbacks": 0,
+      "callbackMsPerSecond": 0,
+      "p95CallbackMs": 0,
+      "over16ms": 0
+    }
+  },
+  "errors": [],
+  "horizontalOverflow": false
+}

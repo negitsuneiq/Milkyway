@@ -1,144 +1,746 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Güneş Sistemi: canlı yörünge modeli</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,800&family=Instrument+Sans:wght@400;600&display=swap">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<a class="skip" href="#model">İçeriğe geç</a><span id="sr" class="sr" aria-live="polite"></span><div id="prog" aria-hidden="true"></div>
-<div id="pre" aria-hidden="true"><div><b id="pc">0:00</b><span>Güneş'ten Dünya'ya ışığın yolculuğu</span><i></i></div></div>
-<canvas id="sky" aria-hidden="true"></canvas>
-<nav aria-label="Bölümler"><a href="#model">Yörünge modeli</a><a href="#boyut">Boyutlar</a><a href="#tur">Gezegen türleri</a><a href="#isik">Işık yarışı</a><a href="#gunes">Güneş</a><a href="#uydu">Uydular</a><a href="#kucuk">Küçük cisimler</a><a href="#gorev">Görevler</a><a href="#otesi">Ötesi</a></nav>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#101313" />
+    <meta
+      name="description"
+      content="Güneş Sistemi’ne kendi yolculuğunu yap. 8 gezegen, 5 cüce gezegen ve 12 uyduyu etkileşimli yörünge modeliyle keşfet."
+    />
+    <title>Milkyway — Bir yıldızın etrafında, her şey.</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="fonts/instrument-serif.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/instrument-serif-italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="solar-data.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#model">İçeriğe geç</a>
+    <div class="sr" id="sr" aria-live="polite" aria-atomic="true"></div>
+    <div class="site-nav">
+      <a class="brand" href="#baslangic" aria-label="Milkyway ana sayfa"
+        ><svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+          <circle cx="16" cy="16" r="5" fill="currentColor" />
+          <ellipse
+            cx="16"
+            cy="16"
+            rx="15"
+            ry="7"
+            transform="rotate(-38 16 16)"
+            fill="none"
+            stroke="currentColor"
+          /></svg
+        >milkyway<span class="brand-dot">.</span></a
+      >
+      <nav aria-label="Ana gezinme">
+        <a href="#model">Keşfet</a><a href="#hikayeler">Hikâyeler</a
+        ><a href="#otesi"
+          >Derin uzay
+          <svg
+            class="arrow-icon"
+            viewBox="0 0 20 20"
+            width="16"
+            height="16"
+            aria-hidden="true"
+          >
+            <path
+              d="M4 16 16 4M4 4h12v12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            /></svg
+        ></a>
+      </nav>
+      <span class="nav-note">EVREN ATLASI · 01</span>
+    </div>
+    <main>
+      <header class="hero wrap" id="baslangic">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="status-dot"></span> SAMANYOLU’NDAN BİR MERHABA
+          </p>
+          <h1>Bir yıldızın<br />etrafında,<br /><em>her şey.</em></h1>
+          <p class="hero-intro">
+            Uçsuz bucaksız evrende küçük bir mahalle.<br />Sekiz gezegen, buzlu
+            dünyalar ve bizim hikâyemiz.
+          </p>
+          <a class="round-link" href="#model"
+            ><span class="round-icon" aria-hidden="true">↓</span> Yolculuğa
+            başla</a
+          >
+        </div>
+        <div class="hero-visual">
+          <div class="hero-orbit orbit-one" aria-hidden="true"></div>
+          <div class="hero-orbit orbit-two" aria-hidden="true"></div>
+          <span class="coordinate coord-top"
+            >SOL SİSTEMİ<br />ORION KOLU / SAMANYOLU</span
+          >
+          <div class="earth-wrap">
+            <img
+              class="hero-earth"
+              src="images/earth-800.webp"
+              srcset="images/earth-480.webp 480w, images/earth-800.webp 800w"
+              sizes="(max-width: 760px) 65vw, 430px"
+              alt="Apollo 17’den görülen Dünya: Afrika, Antarktika ve beyaz bulutların sardığı mavi gezegen"
+              width="1280"
+              height="1280"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
+          <div class="earth-label">
+            <span class="cross" aria-hidden="true">+</span
+            ><span>BURADASIN<b>Dünya</b></span
+            ><span class="label-rule" aria-hidden="true"></span>
+          </div>
+          <p class="coordinate coord-bottom">
+            4,6 MİLYAR YILLIK BİR HİKÂYE.<br />HENÜZ BAŞINDAYIZ.
+          </p>
+        </div>
+        <div class="hero-bottom">
+          <span>MERAK ET. DOKUN. KEŞFET.</span
+          ><span>BİR MAVİ NOKTA.<br />TAM ŞU AN, TAM BURADA.</span
+          ><a href="#model" aria-label="Yörünge modeline git">↓</a>
+        </div>
+      </header>
 
-<header>
-<h1>Güneş Sistemi</h1>
-<p class="lead">Sekiz gezegen, yüzlerce uydu ve milyonlarca küçük cisim tek bir yıldızın çevresinde dönüyor. Aşağıdaki model gerçek yörünge sürelerine göre çalışıyor.</p>
-</header>
+      <section class="chapter wrap" id="model" aria-labelledby="model-title">
+        <div class="section-head">
+          <p class="eyebrow">01 / KOZMİK KOREOGRAFİ</p>
+          <span class="section-tag">ETKİLEŞİMLİ ATLAS</span>
+        </div>
+        <div class="section-intro">
+          <h2 id="model-title">Hiçbir şey<br /><em>yerinde durmuyor.</em></h2>
+          <p>
+            Bir dünya seç. Yörüngesini izle.<br />Sonra, onun çevresindeki
+            dünyaları keşfet.
+          </p>
+        </div>
+        <noscript
+          ><p class="notice">
+            Etkileşimli model için JavaScript’i etkinleştir. Aşağıdaki astronomi
+            yazılarını ve görselleri JavaScript olmadan da keşfedebilirsin.
+          </p></noscript
+        >
+        <div class="atlas">
+          <div class="atlas-top">
+            <div class="segmented" role="group" aria-label="Model görünümü">
+              <button id="solar-view" aria-pressed="true">Güneş sistemi</button
+              ><button id="moon-view" aria-pressed="false">Uydu sistemi</button>
+            </div>
+            <span class="live-label"
+              ><span class="status-dot"></span
+              ><span id="model-status">HAREKETLİ MODEL</span></span
+            >
+          </div>
+          <div class="body-browser">
+            <div
+              class="filter-controls"
+              role="group"
+              aria-label="Gök cismi kategorisi"
+            >
+              <button data-filter="planet" aria-pressed="true">
+                Gezegenler <span>08</span></button
+              ><button data-filter="dwarf" aria-pressed="false">
+                Cüce gezegenler <span>05</span></button
+              ><button data-filter="moon" aria-pressed="false">
+                Uydular <span>12</span>
+              </button>
+            </div>
+            <div
+              id="picker"
+              class="picker"
+              role="group"
+              aria-label="Gök cismi seç"
+            ></div>
+          </div>
+          <div class="atlas-content">
+            <div class="orbit-panel">
+              <div class="orbit-heading">
+                <span id="view-title">Güneş’in çevresinde</span
+                ><span id="orbit-count">13 dünya · 1 yıldız</span>
+              </div>
+              <div class="host-control" id="host-control" hidden>
+                <label for="host-select">Merkez</label
+                ><select id="host-select">
+                  <option value="earth">Dünya</option>
+                  <option value="mars">Mars</option>
+                  <option value="jupiter">Jüpiter</option>
+                  <option value="saturn">Satürn</option>
+                  <option value="uranus">Uranüs</option>
+                  <option value="neptune">Neptün</option>
+                  <option value="pluto">Plüton</option>
+                </select>
+              </div>
+              <canvas
+                id="orr"
+                tabindex="0"
+                aria-label="Etkileşimli yörünge modeli. Cisim seçim düğmelerini veya sağ ve sol ok tuşlarını kullan."
+                aria-describedby="model-note"
+                >Modeldeki cisimleri seçim düğmelerinden
+                keşfedebilirsin.</canvas
+              >
+              <div class="orbit-legend">
+                <span
+                  ><i class="legend-line"></i>
+                  <span id="primary-legend">Gezegen</span></span
+                ><span id="dwarf-legend"
+                  ><i class="legend-line dashed"></i> Cüce gezegen</span
+                ><span id="orbit-hint">Bir cisme dokun ↗</span>
+              </div>
+              <div class="atlas-controls">
+                <button id="pp" class="pause-button" aria-pressed="false">
+                  <span aria-hidden="true">Ⅱ</span> Duraklat
+                </button>
+                <div
+                  class="speed-controls"
+                  role="group"
+                  aria-label="Simülasyon hızı"
+                >
+                  <button data-speed="slow" aria-pressed="false">Yavaş</button
+                  ><button data-speed="normal" aria-pressed="true">
+                    Normal</button
+                  ><button data-speed="fast" aria-pressed="false">Hızlı</button>
+                </div>
+                <span id="speed-label">1 sn = 30 gün</span
+                ><output id="clock" aria-label="Modelde geçen süre"
+                  >0 gün</output
+                >
+              </div>
+            </div>
+            <aside class="body-detail" aria-labelledby="pname">
+              <div class="detail-top">
+                <span class="eyebrow" id="pkind">GEZEGEN / 03</span
+                ><span id="body-index">03</span>
+              </div>
+              <canvas
+                id="gl"
+                width="200"
+                height="200"
+                tabindex="0"
+                aria-label="Seçili cismin sanatsal küresi. Yatay sürükle veya ok tuşlarıyla döndür."
+              ></canvas>
+              <p class="globe-hint">
+                Sürükle ve döndür <span aria-hidden="true">↔</span>
+              </p>
+              <h3 id="pname">Dünya</h3>
+              <p id="pdesc">Kozmik okyanustaki evimiz.</p>
+              <dl id="pdata"></dl>
+              <button id="explore-moons" class="text-link">
+                Uydusunu keşfet
+                <svg
+                  class="arrow-icon"
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 16 16 4M4 4h12v12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.3"
+                  />
+                </svg>
+              </button>
+              <p class="detail-fact" id="pfact"></p>
+            </aside>
+          </div>
+        </div>
+        <p class="model-note" id="model-note">
+          <span aria-hidden="true">ⓘ</span> Bir keşif modeli, canlı gökyüzü
+          haritası değil. Yörüngeler ve boyutlar şematik; dolanım süreleri
+          gerçek oranlıdır. Başlangıç konumları temsilidir. Uydu görünümünde
+          zaman yavaşlatılır. Küreler sanatsal betimlemelerdir.
+        </p>
+      </section>
 
-<section id="model" style="padding-top:24px">
-<div class="orr">
-<canvas id="orr" aria-label="Güneş Sistemi yörünge modeli. Bir gezegene dokunarak seç."></canvas>
-<div class="ctl" role="group" aria-label="Zaman ve kamera">
-<button id="pp" aria-pressed="false">Duraklat</button>
-<button data-sp="30" aria-pressed="false">Yavaş</button>
-<button data-sp="120" aria-pressed="true">Normal</button>
-<button data-sp="700" aria-pressed="false">Hızlı</button>
-<button id="all" aria-pressed="true">Tüm sistem</button>
-<span id="clock"></span>
-</div>
-<p class="note" style="text-align:center;margin:4px auto 0">Güneş sağa doğru ilerlerken gezegenler arkasında (solunda) sarmal bir iz bırakır.</p>
-<p class="note" style="text-align:center;margin:6px auto 0">Yörüngeler okunabilsin diye yakınlaştırılmış, gezegen boyutları ölçeksizdir. Hızlar gerçek orandadır. Bir gezegene dokununca kamera ona yaklaşır ve gezegen kendi etrafında döner. Sağa veya sola kaydırarak gezegen değiştirebilir, Tüm sistem düğmesiyle geri çıkabilirsin.</p>
-</div>
-<div class="picker" id="picker" role="group" aria-label="Gök cismi seç"></div>
-<div class="stage"><div class="gw"><canvas id="gl" width="300" height="300" aria-label="Seçili gök cisminin üç boyutlu modeli. Sürükleyerek döndür."></canvas><div class="note">Sürükleyerek döndür</div></div><div><h2 id="pname"></h2><p id="pdesc"></p><dl id="pdata"></dl></div></div>
-</section>
+      <div class="number-strip wrap" aria-label="Sisteme kısa bakış">
+        <div><strong>01</strong><span>BİZE IŞIK VEREN YILDIZ</span></div>
+        <div><strong>08</strong><span>BİRBİRİNDEN FARKLI GEZEGEN</span></div>
+        <div><strong>05</strong><span>TANINMIŞ CÜCE GEZEGEN</span></div>
+        <div><strong>∞</strong><span>MERAK ETMEK İÇİN NEDEN</span></div>
+      </div>
 
-<div class="mq" aria-hidden="true"><div><span>SEKİZ GEZEGEN</span><span>400+ UYDU</span><span>TEK YILDIZ</span><span>4,6 MİLYAR YIL</span><span>SEKİZ GEZEGEN</span><span>400+ UYDU</span><span>TEK YILDIZ</span><span>4,6 MİLYAR YIL</span></div></div>
-<section id="boyut">
-<h2>Boyut karşılaştırması</h2>
-<p>Çaplar Dünya'nın çapı 1 kabul edilerek verilmiştir. Güneş bu çubuğa sığmayacak kadar büyük: Dünya'nın 109 katı.</p>
-<div class="bars" id="bars"></div>
-</section>
+      <section class="chapter wrap" id="boyut">
+        <div class="section-head">
+          <p class="eyebrow">02 / BİR PERSPEKTİF MESELESİ</p>
+          <span class="section-tag">ÖLÇEK</span>
+        </div>
+        <div class="section-intro">
+          <h2>Büyük dediğin,<br /><em>ne kadar büyük?</em></h2>
+          <p>
+            Dünya’nın çapı bir birim olsaydı…<br />Jüpiter’e bakınca fikrin
+            değişebilir.
+          </p>
+        </div>
+        <div class="scale-layout">
+          <div class="scale-statement">
+            <span class="eyebrow">GÜNEŞ’İN ÇAPI</span
+            ><strong>109<span>×</span></strong>
+            <p>Dünya’yı yan yana yaklaşık 109 kez diz.<br />İşte bir Güneş.</p>
+            <div class="scale-orbit" aria-hidden="true"><i></i><b></b></div>
+          </div>
+          <div
+            class="bars"
+            id="bars"
+            aria-label="Gezegen çaplarının Dünya’ya oranı"
+          ></div>
+        </div>
+      </section>
 
-<section id="tur">
-<h2>Üç tür gezegen</h2>
-<div class="grid">
-<div class="card"><h3>Kayalık gezegenler</h3><p>Merkür, Venüs, Dünya ve Mars. Katı yüzeyleri ve metalik çekirdekleri var, küçük ve yoğundurlar. Güneş'e en yakın dört gezegendir.</p></div>
-<div class="card"><h3>Gaz devleri</h3><p>Jüpiter ve Satürn. Çoğunlukla hidrojen ve helyumdan oluşur, katı yüzeyleri yoktur. Jüpiter'in kütlesi diğer tüm gezegenlerin toplamının 2,5 katından fazladır.</p></div>
-<div class="card"><h3>Buz devleri</h3><p>Uranüs ve Neptün. Su, amonyak ve metan gibi "buzların" derin bir sıvı mantosu var. Atmosferdeki metan mavi-turkuaz rengi verir.</p></div>
-</div>
-</section>
+      <section class="light-section" id="isik">
+        <div class="wrap chapter">
+          <div class="section-head">
+            <p class="eyebrow">03 / EVRENİN HIZ SINIRI</p>
+            <span class="section-tag">BİR DENEY YAPALIM</span>
+          </div>
+          <div class="section-intro">
+            <h2>Işık bile<br /><em>zaman ister.</em></h2>
+            <p>
+              Güneş’e baktığında, onu yaklaşık 8 dakika önceki hâliyle görürsün.
+              Şimdi bir ışık parçacığını yola çıkar.
+            </p>
+          </div>
+          <div class="light-summary">
+            <span class="light-speed">299.792 <small>km/sn</small></span>
+            <p>
+              Bir saniyede Dünya’nın çevresini<br />yaklaşık 7,5 kez dolaşacak
+              kadar hızlı.
+            </p>
+          </div>
+          <div id="lanes"></div>
+          <div class="race-controls">
+            <button id="go" class="primary-button">
+              Işığı gönder
+              <svg
+                class="arrow-icon"
+                viewBox="0 0 20 20"
+                width="16"
+                height="16"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 16 16 4M4 4h12v12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.3"
+                />
+              </svg></button
+            ><output id="rt" aria-label="Işığın yolculuk süresi">0 sn</output
+            ><span class="note">Yaklaşık 1.700 kat hızlandırılmıştır.</span>
+          </div>
+          <p id="race-status" class="sr" aria-live="polite"></p>
+        </div>
+      </section>
 
-<section id="isik">
-<h2>Işık yarışı</h2>
-<p>Güneş'ten çıkan ışık saniyede 299.792 km gider. Aşağıdaki yarış gerçek süreleri yaklaşık 1.700 kat hızlandırır: Dünya'ya 8 dakikada, Neptün'e 4 saatten fazlada ulaşır.</p>
-<div id="lanes"></div>
-<div class="rc"><button id="go">Işığı gönder</button><span id="rt">0 sn</span></div>
-</section>
-<section id="gunes">
-<h2>Güneş</h2>
-<p>Sistemin kütlesinin %99,86'sı Güneş'tedir. Her saniye yaklaşık 600 milyon ton hidrojeni helyuma çevirir. Ömrünün yaklaşık yarısındadır ve 5 milyar yıl sonra kırmızı deve dönüşecek.</p>
-<details open><summary>Katmanları</summary><p>Çekirdek (yaklaşık 15 milyon °C, füzyonun olduğu yer), ışınım bölgesi, konveksiyon bölgesi, yüzey olan fotosfer (yaklaşık 5.500 °C), kromosfer ve korona. Koronanın sıcaklığı 1 milyon °C'yi aşar, yüzeyden çok daha sıcaktır ve bunun nedeni hâlâ araştırılıyor.</p></details>
-<details><summary>Güneş lekeleri ve 11 yıllık döngü</summary><p>Güçlü manyetik alanın bastırdığı, çevresinden daha soğuk bölgeler koyu leke olarak görünür. Leke sayısı yaklaşık 11 yılda bir azalıp artar. Zirvede patlamalar ve kütle atımları sıklaşır.</p></details>
-<details><summary>Güneş rüzgârı ve auroralar</summary><p>Güneş'ten saniyede yüzlerce km hızla akan yüklü parçacık akışıdır. Dünya'nın manyetik alanıyla etkileşince kutuplarda kutup ışıkları (aurora) oluşur. Şiddetli fırtınalar uyduları ve elektrik şebekelerini etkileyebilir.</p></details>
-<details><summary>Güneş tutulması</summary><p>Ay, Güneş'in önüne geçince oluşur. Güneş'in çapı Ay'ınkinin yaklaşık 400 katıdır, ama Dünya'ya da yaklaşık 400 kat uzaktır, bu yüzden gökte aynı büyüklükte görünürler.</p></details>
-</section>
+      <section class="chapter wrap" id="hikayeler">
+        <div class="section-head">
+          <p class="eyebrow">04 / YAKINDAN BAKINCA</p>
+          <span class="section-tag">KOZMİK NOTLAR</span>
+        </div>
+        <div class="section-intro">
+          <h2>Her dünyanın<br /><em>bir hikâyesi var.</em></h2>
+          <p>
+            Buzun altında okyanuslar.<br />Gökyüzünden yağan metan.<br />Tanıdık
+            olanın çok ötesinde.
+          </p>
+        </div>
+        <div class="story-grid" id="uydu">
+          <article class="story-card europa-card">
+            <span class="eyebrow">JÜPİTER’İN UYDUSU / EUROPA</span>
+            <div class="story-moon moon-europa" aria-hidden="true"></div>
+            <div>
+              <h3>Buzun altında<br />başka bir dünya.</h3>
+              <p>
+                Europa’nın çatlak buz kabuğunun altında, küresel bir okyanus
+                olduğu düşünülüyor. Yaşam için gerekli koşullar orada olabilir
+                mi?
+              </p>
+              <button class="text-link" data-select="europa">
+                Europa’yı keşfet
+                <svg
+                  class="arrow-icon"
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 16 16 4M4 4h12v12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.3"
+                  />
+                </svg>
+              </button>
+            </div>
+          </article>
+          <article class="story-card titan-card">
+            <span class="eyebrow">SATÜRN’ÜN UYDUSU / TITAN</span>
+            <div class="story-moon moon-titan" aria-hidden="true"></div>
+            <div>
+              <h3>Yağmur yağıyor.<br />Ama su değil.</h3>
+              <p>
+                Titan’ın nehirleri ve gölleri sıvı metan ve etanla dolu. Kalın
+                atmosferinin altında, bambaşka bir sıvı döngüsü işliyor.
+              </p>
+              <button class="text-link" data-select="titan">
+                Titan’ı keşfet
+                <svg
+                  class="arrow-icon"
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 16 16 4M4 4h12v12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.3"
+                  />
+                </svg>
+              </button>
+            </div>
+          </article>
+          <article class="story-card pluto-card">
+            <span class="eyebrow">CÜCE GEZEGEN / PLÜTON</span>
+            <div class="story-moon moon-pluto" aria-hidden="true"></div>
+            <div>
+              <h3>Küçük dünyaların<br />büyük kalpleri.</h3>
+              <p>
+                Plüton’un kalp şeklindeki bölgesi, azot buzullarıyla dolu.
+                Charon ile birlikte ortak kütle merkezlerinin çevresinde dans
+                ediyorlar.
+              </p>
+              <button class="text-link" data-select="pluto">
+                Plüton’u keşfet
+                <svg
+                  class="arrow-icon"
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 16 16 4M4 4h12v12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.3"
+                  />
+                </svg>
+              </button>
+            </div>
+          </article>
+        </div>
+        <div class="knowledge-grid" id="tur">
+          <div>
+            <span class="eyebrow">AİLE ALBÜMÜ</span>
+            <h3>Aynı yıldız.<br />Farklı dünyalar.</h3>
+          </div>
+          <div class="accordions">
+            <details>
+              <summary>
+                01 <span>Kayalık gezegenler</span><b aria-hidden="true">+</b>
+              </summary>
+              <p>
+                Merkür, Venüs, Dünya ve Mars. Katı yüzeyleri, metalik
+                çekirdekleri var; küçük ve yoğundurlar. Güneş’e en yakın dört
+                gezegendir.
+              </p>
+            </details>
+            <details>
+              <summary>
+                02 <span>Gaz ve buz devleri</span><b aria-hidden="true">+</b>
+              </summary>
+              <p>
+                Jüpiter ve Satürn büyük ölçüde hidrojen ve helyumdan oluşur.
+                Uranüs ve Neptün ise su, amonyak ve metan gibi daha ağır
+                bileşiklerce zengin iç yapıları nedeniyle buz devleri olarak
+                sınıflandırılır.
+              </p>
+            </details>
+            <details id="kucuk">
+              <summary>
+                03 <span>Cüce gezegenler ve küçük cisimler</span
+                ><b aria-hidden="true">+</b>
+              </summary>
+              <p>
+                Ceres, Plüton, Haumea, Makemake ve Eris, IAU tarafından tanınan
+                beş cüce gezegendir. Kendi kütleçekimleriyle yaklaşık
+                yuvarlaklaşırlar ama yörüngelerinin çevresini
+                temizlememişlerdir. Ceres asteroit kuşağında; diğerleri
+                Neptün’ün ötesindedir. Kuiper Kuşağı, kuyruklu yıldızlar ve
+                varsayılan Oort Bulutu, sistemimizin uzak sınırlarını oluşturur.
+              </p>
+            </details>
+            <details id="gunes">
+              <summary>
+                04 <span>Bütün hikâyenin yıldızı: Güneş</span
+                ><b aria-hidden="true">+</b>
+              </summary>
+              <p>
+                Çekirdekte yaklaşık 15 milyon °C’de gerçekleşen füzyon enerji
+                üretir. Bu enerji ışınım ve konveksiyon bölgelerinden geçerek
+                yaklaşık 5.500 °C’lik fotosfere ulaşır. Manyetik etkinlik, güneş
+                lekeleri ve yaklaşık 11 yıllık döngüyle değişir. Güneş
+                rüzgârının Dünya’nın manyetik alanıyla etkileşimi kutup
+                ışıklarını oluşturur.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
 
-<section id="uydu">
-<h2>Uydular</h2>
-<p>Bilinen doğal uydu sayısı 400'ü aşar. Öne çıkanlar:</p>
-<div class="grid">
-<div class="card"><h3>Io (Jüpiter)</h3><p>Sistemin en volkanik cismi. Yüzeyinde 400'den fazla aktif yanardağ var.</p></div>
-<div class="card"><h3>Europa (Jüpiter)</h3><p>Buz kabuğunun altında Dünya'nınkinden fazla su içeren global bir okyanus olduğu düşünülüyor.</p></div>
-<div class="card"><h3>Ganymede (Jüpiter)</h3><p>Sistemin en büyük uydusu, Merkür'den büyük. Kendi manyetik alanı olan tek uydudur.</p></div>
-<div class="card"><h3>Titan (Satürn)</h3><p>Yoğun azotlu atmosferi var ve yüzeyinde sıvı metan ve etan gölleri akıyor.</p></div>
-<div class="card"><h3>Enceladus (Satürn)</h3><p>Güney kutbundaki çatlaklardan buz ve su buharı fışkırtır. Altında sıvı okyanus bulunuyor.</p></div>
-<div class="card"><h3>Triton (Neptün)</h3><p>Gezegenin dönüşüne ters yönde döner, muhtemelen Kuiper Kuşağı'ndan yakalanmıştır.</p></div>
-</div>
-</section>
+      <section class="chapter wrap" id="gorev">
+        <div class="section-head">
+          <p class="eyebrow">05 / MERAKIN İZİNDE</p>
+          <span class="section-tag">KEŞİF GÜNLÜĞÜ</span>
+        </div>
+        <div class="section-intro">
+          <h2>Önce hayal ettik.<br /><em>Sonra yola çıktık.</em></h2>
+          <p>Küçük adımlarımızın<br />Güneş Sistemi’ndeki uzun yankısı.</p>
+        </div>
+        <div class="timeline">
+          <article>
+            <span>1969</span>
+            <h3>İlk adım.</h3>
+            <p>
+              Apollo 11 ile ilk insanlar Ay’a indi. Uzakta görünen bir dünya,
+              ayak izlerimizi taşıyan bir yere dönüştü.
+            </p>
+          </article>
+          <article>
+            <span>1977</span>
+            <h3>Uzun bir veda.</h3>
+            <p>
+              Voyager 1 ve 2 yola çıktı. Voyager 2, Uranüs ve Neptün’ü yakından
+              ziyaret eden tek araç olmayı sürdürüyor.
+            </p>
+          </article>
+          <article>
+            <span>2005</span>
+            <h3>Yabancı bir kıyı.</h3>
+            <p>
+              Cassini’nin taşıdığı Huygens, Titan’a indi. Dış Güneş
+              Sistemi’ndeki bir dünyaya ilk yumuşak iniş gerçekleşti.
+            </p>
+          </article>
+          <article>
+            <span>2015</span>
+            <h3>Bir kalple karşılaştık.</h3>
+            <p>
+              New Horizons, Plüton’un yanından geçti. Birkaç pikselden ibaret
+              dünya, dağları ve buzulları olan bir yere dönüştü.
+            </p>
+          </article>
+        </div>
+        <p class="timeline-note">
+          Keşif sürüyor: Juno (2016), Perseverance ve Parker’ın korona geçişi
+          (2021), DART (2022), Europa Clipper’ın fırlatılışı (2024).
+        </p>
+      </section>
 
-<section id="kucuk">
-<h2>Küçük cisimler</h2>
-<div class="grid">
-<div class="card"><h3>Asteroit kuşağı</h3><p>Mars ile Jüpiter arasında, yüz binlerce bilinen asteroit. Toplam kütlesi Ay'ın yaklaşık %3'ü. Modeldeki noktalar bu kuşağı gösterir.</p></div>
-<div class="card"><h3>Cüce gezegenler</h3><p>Ceres, Plüton, Haumea, Makemake, Eris. Plüton 2006'da bu sınıfa alındı. Yörüngelerini temizleyememişlerdir.</p></div>
-<div class="card"><h3>Kuiper Kuşağı</h3><p>Neptün'ün ötesinde 30–50 AB arası buzlu cisimler bölgesi.</p></div>
-<div class="card"><h3>Kuyruklu yıldızlar</h3><p>Buz ve toz topları. Güneş'e yaklaşınca buharlaşıp kuyruk oluşturur. Halley yaklaşık 76 yılda bir döner.</p></div>
-<div class="card"><h3>Oort Bulutu</h3><p>2.000–100.000 AB arasında varsayılan küresel buz kabuğu, uzun periyotlu kuyruklu yıldızların kaynağı. Doğrudan gözlenmedi.</p></div>
-</div>
-<p class="note" style="margin-top:12px">1 AB (astronomik birim), Dünya ile Güneş arası ortalama mesafe: yaklaşık 150 milyon km.</p>
-</section>
-
-<section id="gorev">
-<h2>Güneş Sistemi görevleri</h2>
-<div class="time">
-<div><b>1969</b>Apollo 11 ile ilk insanlar Ay'a indi.</div>
-<div><b>1977</b>Voyager 1 ve 2 fırlatıldı. Voyager 2, Uranüs'ü (1986) ve Neptün'ü (1989) ziyaret eden tek araçtır.</div>
-<div><b>2004–2017</b>Cassini, Satürn sistemini inceledi. Huygens sondası 2005'te Titan'a indi.</div>
-<div><b>2015</b>New Horizons, Plüton'un yanından geçerek ilk yakın görüntüleri çekti.</div>
-<div><b>2016</b>Juno, Jüpiter yörüngesine girdi.</div>
-<div><b>2021</b>Perseverance Mars'a indi. Parker Güneş Sondası Güneş'in koronasına girdi.</div>
-<div><b>2022</b>DART, bir asteroidin yörüngesini ilk kez değiştirdi.</div>
-</div>
-</section>
-
-
-<section id="otesi">
-<h2>Sistemimizin ötesi</h2>
-<p class="sub">Güneş yalnız doğmadı. 4,6 milyar yıl önce, aşağıdakine benzer dev bir gaz ve toz bulutunun içinde, yüzlerce kardeş yıldızla birlikte oluştu. Görsellere dokunarak büyütebilirsin.</p>
-<figure style="margin-top:28px"><button class="zb" type="button"><img src="webb.jpg" width="1800" height="1042" decoding="async" alt="Karina Bulutsusu'nun kenarında turuncu gaz ve toz dağları, üstünde mavi ve yıldızlarla dolu gökyüzü"></button>
-<figcaption><b>Kozmik Uçurumlar</b><span>James Webb Uzay Teleskobu · Karina Bulutsusu · yaklaşık 7.600 ışık yılı uzakta</span></figcaption></figure>
-<p style="margin-top:16px">Bu "uçurumların" en yüksek zirveleri yaklaşık 7 ışık yılı yüksekliğinde. Genç ve çok sıcak yıldızların ışığı gaz duvarını oyar, duvarın içinde yeni yıldızlar doğar. Webb kızılötesiyle toz perdesinin arkasını görür.</p>
-
-<div class="split">
-<figure><button class="zb" type="button"><img src="hubble.jpg" width="1600" height="1087" loading="lazy" decoding="async" alt="Karina Bulutsusu'ndaki Gizemli Dağ: gaz ve tozdan oluşmuş sütun, tepesinden çıkan ışık jetleri"></button>
-<figcaption><b>Gizemli Dağ</b><span>Hubble Uzay Teleskobu · Karina Bulutsusu</span></figcaption></figure>
-<div><h3>Yıldızların doğum yeri</h3>
-<p>Aynı dev bulutsunun başka bir köşesi, bu kez Hubble'ın görünür ışıktaki gözüyle. Sütunun tepesinden fışkıran ışık jetleri, içinde yeni doğan yıldızların olduğunu gösterir. Hubble ile Webb aynı bulutsuya farklı dalga boylarından bakar.</p>
-<div class="stats"><div><b>≈ 3 ışık yılı</b>sütunun yüksekliği</div><div><b>≈ 7.500 ışık yılı</b>Dünya'ya uzaklık</div><div><b>2010</b>Hubble'ın 20. yıl görüntüsü</div></div></div>
-</div>
-
-<div class="split rev">
-<figure><button class="zb" type="button"><img src="andromeda.jpg" width="1400" height="1400" loading="lazy" decoding="async" alt="Andromeda Galaksisi morötesi ışıkta: parlak sarı çekirdek ve çevresinde mavi sarmal kollar"></button>
-<figcaption><b>Andromeda Galaksisi</b><span>GALEX uzay teleskobu · morötesi ışık</span></figcaption></figure>
-<div><h3>Komşu galaksi</h3>
-<p>Mavi halkalar sıcak ve genç yıldızların doğduğu bölgeler, sarı çekirdekte yaşlı yıldızlar toplanmış. Sarı noktaların çoğu bizim galaksimizin içindeki yakın yıldızlar. Güneş Sistemi ise Samanyolu'nun Orion Kolu'nda, merkezden yaklaşık 26.000 ışık yılda ve galaksinin merkezi etrafındaki turunu yaklaşık 230 milyon yılda tamamlıyor.</p>
-<div class="stats"><div><b>2,5 milyon ışık yılı</b>Samanyolu'na uzaklık</div><div><b>≈ 1 trilyon</b>tahmini yıldız sayısı</div><div><b>≈ 110 km/sn</b>bize yaklaşma hızı</div></div>
-<p class="note" style="margin-top:12px">Karanlık bir gecede çıplak gözle görülebilen en uzak cisimlerden biridir.</p></div>
-</div>
-</section>
-
-<section id="son" class="fin">
-<h2>Hepimiz yıldız tozuyuz</h2>
-<p>Vücudundaki hidrojen dışındaki hemen her atom bir yıldızın içinde ya da bir yıldızın ölümünde üretildi. Geceleyin başını kaldırdığında baktığın şey, aynı zamanda senin kökenin.</p>
-<button id="top">Başa dön ↑</button>
-</section>
-<footer>Veriler yuvarlanmıştır. Uydu sayıları sürekli güncellenir, güncel rakamlar için NASA ve ESA'ya bakın. Görseller Hubble, James Webb ve GALEX teleskoplarının yayımlanmış görüntüleridir.</footer>
-
-<div id="lb" hidden role="dialog" aria-modal="true" aria-label="Görsel"><button id="lbx" aria-label="Kapat">×</button><img alt=""><p></p></div>
-<script src="script.js"></script>
-</body>
+      <section class="chapter wrap deep-space" id="otesi">
+        <div class="section-head">
+          <p class="eyebrow">06 / BİLDİĞİMİZİN ÖTESİ</p>
+          <span class="section-tag">UZAYDAN KARTPOSTALLAR</span>
+        </div>
+        <div class="section-intro">
+          <h2>Mahallemizden<br /><em>biraz uzaklaşalım.</em></h2>
+          <p>
+            Güneş de bir zamanlar böyle bir bulutta doğdu.<br />Gördüğün şey,
+            başka hikâyelerin başlangıcı.
+          </p>
+        </div>
+        <figure class="feature-image">
+          <button class="zb" aria-label="Kozmik Uçurumlar görselini büyüt">
+            <img
+              src="images/webb-1280.webp"
+              srcset="images/webb-640.webp 640w, images/webb-1280.webp 1280w"
+              sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1384px) calc(100vw - 104px), 1280px"
+              data-full="webb.jpg"
+              width="1800"
+              height="1042"
+              loading="lazy"
+              decoding="async"
+              alt="Karina Bulutsusu’nun kenarında yıldızlarla çevrili turuncu gaz ve toz dağları"
+            /><span class="image-expand" aria-hidden="true"
+              ><svg
+                class="arrow-icon"
+                viewBox="0 0 20 20"
+                width="16"
+                height="16"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 16 16 4M4 4h12v12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.3"
+                /></svg
+            ></span>
+          </button>
+          <figcaption>
+            <div>
+              <span class="eyebrow">JAMES WEBB UZAY TELESKOBU</span>
+              <h3>Kozmik Uçurumlar</h3>
+            </div>
+            <p>
+              Karina Bulutsusu · ≈ 7.600 ışık yılı<br />Gaz ve tozun içinde yeni
+              yıldızlar doğuyor.
+            </p>
+          </figcaption>
+        </figure>
+        <div class="space-pair">
+          <figure>
+            <button class="zb" aria-label="Gizemli Dağ görselini büyüt">
+              <img
+                src="images/hubble-1280.webp"
+                srcset="
+                  images/hubble-640.webp   640w,
+                  images/hubble-1280.webp 1280w
+                "
+                sizes="(max-width: 760px) calc(100vw - 40px), 600px"
+                data-full="hubble.jpg"
+                width="1600"
+                height="1087"
+                loading="lazy"
+                decoding="async"
+                alt="Karina Bulutsusu’ndaki gaz sütunu Gizemli Dağ ve tepesindeki ışık jetleri"
+              /><span class="image-expand" aria-hidden="true"
+                ><svg
+                  class="arrow-icon"
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 16 16 4M4 4h12v12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.3"
+                  /></svg
+              ></span>
+            </button>
+            <figcaption>
+              <div>
+                <span class="eyebrow">HUBBLE UZAY TELESKOBU</span>
+                <h3>Yıldızların doğum yeri</h3>
+              </div>
+              <p>Gizemli Dağ · ≈ 3 ışık yılı yüksekliğinde</p>
+            </figcaption>
+          </figure>
+          <figure>
+            <button class="zb" aria-label="Andromeda görselini büyüt">
+              <img
+                src="images/andromeda-1280.webp"
+                srcset="
+                  images/andromeda-640.webp   640w,
+                  images/andromeda-1280.webp 1280w
+                "
+                sizes="(max-width: 760px) calc(100vw - 40px), 600px"
+                data-full="andromeda.jpg"
+                width="1400"
+                height="1400"
+                loading="lazy"
+                decoding="async"
+                alt="Andromeda Galaksisi’nin morötesi ışıkta sarı çekirdeği ve mavi sarmal kolları"
+              /><span class="image-expand" aria-hidden="true"
+                ><svg
+                  class="arrow-icon"
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 16 16 4M4 4h12v12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.3"
+                  /></svg
+              ></span>
+            </button>
+            <figcaption>
+              <div>
+                <span class="eyebrow">GALEX UZAY TELESKOBU</span>
+                <h3>Bir sonraki komşu</h3>
+              </div>
+              <p>Andromeda · ≈ 2,5 milyon ışık yılı uzakta</p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+      <section class="closing wrap" id="son">
+        <p class="eyebrow">BU HİKÂYENİN BİR PARÇASISIN.</p>
+        <h2>Evren, kendine<br /><em>senin gözlerinle bakıyor.</em></h2>
+        <p>
+          Vücudundaki karbon, oksijen ve demir, yıldızların yaşamında ve
+          ölümünde oluştu. Gökyüzüne baktığında biraz da kendi geçmişini
+          görüyorsun.
+        </p>
+        <a class="round-link" href="#baslangic"
+          ><span class="round-icon" aria-hidden="true">↑</span> Yeniden bak</a
+        >
+      </section>
+    </main>
+    <footer class="wrap">
+      <div class="footer-top">
+        <a class="brand" href="#baslangic">milkyway.</a
+        ><span>MERAKIN YÖRÜNGESİNDE.</span
+        ><button id="motion-toggle" aria-pressed="false">Hareketi azalt</button>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          Bağımsız bir astronomi keşif projesi. Veriler yuvarlanmıştır. Uydu
+          görünümü 12 seçili örnek içerir; tam bir katalog değildir.
+        </p>
+        <div>
+          <p>
+            Bilimsel kaynaklar:
+            <a href="https://science.nasa.gov/solar-system/">NASA Science</a> ·
+            <a href="https://science.nasa.gov/dwarf-planets/"
+              >Cüce gezegenler</a
+            >
+            ·
+            <a href="https://ssd.jpl.nasa.gov/sats/elem/"
+              >JPL uydu yörüngeleri</a
+            >
+            · <a href="https://www.iau.org/public/themes/pluto/">IAU</a>
+          </p>
+          <p>
+            Görseller: Dünya —
+            <a href="https://images.nasa.gov/details/as17-148-22727"
+              >NASA / Apollo 17</a
+            >; Webb — NASA, ESA, CSA, STScI; Hubble — NASA, ESA, M. Livio ve
+            Hubble 20. Yıl Ekibi (STScI); Andromeda — NASA/JPL-Caltech (GALEX).
+          </p>
+        </div>
+      </div>
+    </footer>
+    <dialog id="lb" aria-label="Uzay görseli">
+      <button id="lbx" aria-label="Görseli kapat">×</button><img alt="" />
+      <p></p>
+    </dialog>
+  </body>
 </html>
