@@ -9,15 +9,23 @@ var P=[
 {n:"Jüpiter",col:"#d9b38c",pr:10,a:2.28,T:4333,e:11.2,d:"En büyük gezegen. Büyük Kırmızı Leke, yüzyıllardır süren dev bir fırtına. Gaz devi, katı yüzeyi yok.",v:[["Güneş'e uzaklık","778 milyon km"],["Çap","139.820 km"],["Yıl","11,9 Dünya yılı"],["Gün","yaklaşık 9,9 saat"],["Uydu","95'ten fazla"],["Bulut tepesi","yaklaşık −110 °C"]]},
 {n:"Satürn",col:"#e6d19a",pr:8.5,a:3.09,T:10759,e:9.45,ring:1,d:"Halkalarıyla ünlü gaz devi. Halkalar çoğunlukla su buzundan, genişlikleri yüz binlerce km ama çoğu yerde kalınlıkları onlarca metre. Yoğunluğu sudan düşük.",v:[["Güneş'e uzaklık","1.434 milyon km"],["Çap","116.460 km"],["Yıl","29,5 Dünya yılı"],["Gün","yaklaşık 10,7 saat"],["Uydu","270'ten fazla"],["Bulut tepesi","yaklaşık −140 °C"]]},
 {n:"Uranüs",col:"#7fd4d9",pr:6,a:4.38,T:30687,e:4,d:"Buz devi. Ekseni yaklaşık 98° yatık, adeta yan yatarak döner. Soluk halkaları ve 28 uydusu var.",v:[["Güneş'e uzaklık","2.871 milyon km"],["Çap","50.724 km"],["Yıl","84 Dünya yılı"],["Gün","yaklaşık 17,2 saat (ters)"],["Uydu","28"],["Sıcaklık","yaklaşık −195 °C"]]},
-{n:"Neptün",col:"#4b6cf0",pr:6,a:5.48,T:60190,e:3.9,d:"En uzak gezegen. Rüzgârları sistemin en hızlısı, saatte 2.000 km'yi aşabiliyor. 1846'da önce hesapla öngörüldü, sonra teleskopla bulundu.",v:[["Güneş'e uzaklık","4.495 milyon km"],["Çap","49.244 km"],["Yıl","164,8 Dünya yılı"],["Gün","yaklaşık 16,1 saat"],["Uydu","16"],["Sıcaklık","yaklaşık −200 °C"]]}
+{n:"Neptün",col:"#4b6cf0",pr:6,a:5.48,T:60190,e:3.9,d:"En uzak gezegen. Rüzgârları sistemin en hızlısı, saatte 2.000 km'yi aşabiliyor. 1846'da önce hesapla öngörüldü, sonra teleskopla bulundu.",v:[["Güneş'e uzaklık","4.495 milyon km"],["Çap","49.244 km"],["Yıl","164,8 Dünya yılı"],["Gün","yaklaşık 16,1 saat"],["Uydu","16"],["Sıcaklık","yaklaşık −200 °C"]]},
+{n:"Plüton",col:"#c9b29b",pr:2.6,a:6.28,T:90560,e:.186,d:"Cüce gezegen. 2006'da gezegen sınıfından çıkarıldı. Kalp biçimli azot buzu ovası Sputnik Planitia, 2015'te New Horizons'ın görüntüleriyle tanındı. Eksantrik yörüngesinin bir bölümünde Neptün'den daha yakındır.",v:[["Güneş'e uzaklık","5.906 milyon km (39,5 AB)"],["Çap","2.377 km"],["Yıl","248 Dünya yılı"],["Gün","6,4 Dünya günü (ters)"],["Uydu","5 (en büyüğü Charon)"],["Sıcaklık","yaklaşık −230 °C"]]}
 ];
+// JPL "Approximate Positions of the Planets" (Standish), J2000 elemanları: a (AB), e, L (°), L hızı (°/yüzyıl), günberi boylamı (°)
+var EL=[null,[.38709927,.20563593,252.25032350,149472.67411175,77.45779628],[.72333566,.00677672,181.97909950,58517.81538729,131.60246718],[1.00000261,.01671123,100.46457166,35999.37244981,102.93768193],[1.52371034,.09339410,-4.55343205,19140.30268499,-23.94362959],[5.20288700,.04838624,34.39644051,3034.74612775,14.72847983],[9.53667594,.05386179,49.95424423,1222.49362201,92.59887831],[19.18916464,.04725744,313.23810451,428.48202785,170.95427630],[30.06992276,.00859048,-55.12002969,218.45945325,44.96476227],[39.48211675,.24882730,238.92903833,145.20780515,224.06891629]],
+J2K=Date.UTC(2000,0,1,12),AU=149597870.7,GM=132712440018;
+// Kepler denklemi: d gün (J2000'den) için [güneş merkezli boylam (rad), uzaklık (AB)]
+function kep(k,d){var R=Math.PI/180,w=k[4]*R,M=((k[2]+k[3]*d/36525)*R-w)%6.2832,e=k[1],E=M;for(var i=0;i<6;i++)E-=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));
+var x=Math.cos(E)-e,y=Math.sqrt(1-e*e)*Math.sin(E);return[Math.atan2(y,x)+w,k[0]*Math.sqrt(x*x+y*y)]}
+var D0=(Date.now()-J2K)/864e5;
 var sel=3,speed=120,paused=false,days=0,mo=matchMedia("(prefers-reduced-motion:reduce)").matches;
 var pk=$("picker");
 function show(i){sel=i;var p=P[i];document.documentElement.style.setProperty("--ac",p.col);
 $("pname").textContent=p.n;$("pdesc").textContent=p.d;
 $("pdata").innerHTML=p.v.map(function(x){return"<dt>"+x[0]+"</dt><dd>"+x[1]+"</dd>"}).join("");
 [].forEach.call(pk.children,function(b,j){b.setAttribute("aria-pressed",j===i)})}
-P.forEach(function(p,i){p.ang=Math.random()*6.283;var b=document.createElement("button");b.textContent=p.n;b.onclick=function(){show(i)};pk.appendChild(b)});
+P.forEach(function(p,i){p.k=EL[i];p.ang=0;p.ra=p.a;var b=document.createElement("button");b.textContent=p.n;b.onclick=function(){show(i)};pk.appendChild(b)});
 show(3);
 document.querySelectorAll("[data-sp]").forEach(function(b){b.onclick=function(){speed=+b.dataset.sp;paused=false;sync()}});
 $("pp").onclick=function(){paused=!paused;sync()};
@@ -28,13 +36,13 @@ var cv=$("orr"),c=cv.getContext("2d"),W,H,U,CX,CY,belt=[];
 for(var k=0;k<260;k++)belt.push({a:1.55+Math.random()*.4,t:Math.random()*6.283,s:Math.random()*.9+.5,r:Math.random()*.9+.3});
 function size(){var d=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;c.setTransform(d,0,0,d,0,0);CX=W/2;CY=H/2;U=(Math.min(W,H)/2-16)/5.7}
 var gu=U,gx=0,gy=0,z=1,cam=[0,0],off=[0,0],focus=false,lw=0,last=0,
-RH=[600,1408,-5832,24,24.6,9.9,10.7,-17.2,16.1],
-FC=[["rgba(200,70,10,.6)","rgba(255,230,140,.6)"],["rgba(90,84,78,.55)","rgba(210,200,190,.35)"],["rgba(255,235,190,.5)","rgba(190,130,60,.4)"],["rgba(63,155,74,.9)","rgba(255,255,255,.75)"],["rgba(110,45,20,.55)","rgba(240,210,190,.5)"],["rgba(150,80,50,.55)","rgba(245,230,205,.5)"],["rgba(190,150,95,.5)","rgba(250,240,205,.5)"],["rgba(150,225,230,.4)","rgba(60,150,160,.4)"],["rgba(20,40,150,.55)","rgba(190,210,255,.5)"]];
+RH=[600,1408,-5832,24,24.6,9.9,10.7,-17.2,16.1,-153.3],
+FC=[["rgba(200,70,10,.6)","rgba(255,230,140,.6)"],["rgba(90,84,78,.55)","rgba(210,200,190,.35)"],["rgba(255,235,190,.5)","rgba(190,130,60,.4)"],["rgba(63,155,74,.9)","rgba(255,255,255,.75)"],["rgba(110,45,20,.55)","rgba(240,210,190,.5)"],["rgba(150,80,50,.55)","rgba(245,230,205,.5)"],["rgba(190,150,95,.5)","rgba(250,240,205,.5)"],["rgba(150,225,230,.4)","rgba(60,150,160,.4)"],["rgba(20,40,150,.55)","rgba(190,210,255,.5)"],["rgba(245,235,220,.75)","rgba(110,60,45,.55)"]];
 P.forEach(function(p,i){var s=i*7919+13;function R(){s=(s*16807)%2147483647;return s/2147483647}
 p.spin=0;p.rd=4;p.rate=(RH[i]<0?-1:1)*Math.min(1.2,Math.max(.05,12/Math.abs(RH[i])));p.feat=[];
 for(var k=0;k<16;k++)p.feat.push({la:(R()-.5)*2.3,lo:R()*6.283,s:.12+R()*.2,c:FC[i][k%2]});
 p.bands=i===5||i===6});
-function pos(p){var r=p.a*gu;return[gx+Math.cos(p.ang)*r,gy+Math.sin(p.ang)*r]}
+function pos(p){var r=p.ra*gu;return[gx+Math.cos(p.ang)*r,gy+Math.sin(p.ang)*r]}
 function hexA(h,a){var n=parseInt(h.slice(1),16);return"rgba("+(n>>16)+","+(n>>8&255)+","+(n&255)+","+a+")"}
 function feats(q,r,p){p.feat.forEach(function(f){var lo=f.lo+p.spin,cl=Math.cos(lo);if(cl<=0)return;c.fillStyle=f.c;c.beginPath();c.ellipse(q[0]+r*Math.cos(f.la)*Math.sin(lo),q[1]-r*Math.sin(f.la),f.s*r*cl,f.s*r*.9,0,0,6.283);c.fill()})}
 function globe(q,r,p,dx,dy){c.fillStyle=p.col;c.beginPath();c.arc(q[0],q[1],r,0,6.283);c.fill();c.save();c.clip();
@@ -49,9 +57,12 @@ c.strokeStyle="rgba(190,160,110,.6)";c.lineWidth=Math.max(1,r*.12);c.beginPath()
 function fly(f){focus=f;var tg=f?(sel?pos(P[sel]):[gx,gy]):[W/2,H/2];off=[cam[0]-tg[0],cam[1]-tg[1]];$("all").setAttribute("aria-pressed",!f)}
 var _show=show;show=function(i,nz){_show(i);if(!nz)fly(true)};
 $("all").onclick=function(){fly(false)};
+$("now").onclick=function(){days=0;paused=true;sync()};
+var fd=new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",year:"numeric"}),lck="";
 function draw(ts){var dt=Math.min((ts-last)/1000,.1);last=ts;
 if(W!==lw){lw=W;cam=[W/2,H/2];off=[0,0]}
-if(!mo){if(!paused){days+=speed*dt;P.forEach(function(p){if(p.T)p.ang+=6.283*speed*dt/p.T})}P.forEach(function(p){p.spin+=p.rate*dt})}
+if(!mo){if(!paused)days+=speed*dt;P.forEach(function(p){p.spin+=p.rate*dt})}
+var sim=D0+days;P.forEach(function(p){if(p.k){var q=kep(p.k,sim);p.ang=-q[0];p.ra=Math.sqrt(q[1])}});
 gu=U*.55;gx=W*.68;gy=CY;
 var sr=U*.22*(1+.025*Math.sin(ts/600)),sc=Math.min(1,U/48)*.8,m=Math.min(W,H);
 P[0].rd=sr;P.forEach(function(p){if(p.a)p.rd=p.pr*Math.max(sc,.5)});
@@ -61,10 +72,10 @@ var zt=focus?Math.min(.22*m/P[sel].rd,Math.max(1,.5*m/(Math.hypot(off[0],off[1])
 z=Math.exp(Math.log(z)+(Math.log(zt)-Math.log(z))*(1-Math.exp(-(mo?60:4)*dt)));
 c.clearRect(0,0,W,H);c.save();c.translate(W/2,H/2);c.scale(z,z);c.translate(-cam[0],-cam[1]);
 var dr=U*1.1/365,tm=gx/dr,sq=Math.sqrt(z),g;
-P.forEach(function(p,i){if(!p.a)return;var r=p.a*gu,n=Math.min(700,Math.max(14,Math.ceil(tm/p.T*24))),gr=c.createLinearGradient(gx,0,0,0);
+P.forEach(function(p,i){if(!p.a)return;var n=Math.min(700,Math.max(14,Math.ceil(tm/p.T*24))),gr=c.createLinearGradient(gx,0,0,0);
 gr.addColorStop(0,hexA(p.col,i===sel?.95:.5));gr.addColorStop(1,hexA(p.col,0));
 c.strokeStyle=gr;c.lineWidth=(i===sel?2.2:1.2)/sq;c.beginPath();
-for(var j=0;j<=n;j++){var t=tm*j/n,an=p.ang-6.283*t/p.T,X=gx+Math.cos(an)*r-dr*t,Y=gy+Math.sin(an)*r;j?c.lineTo(X,Y):c.moveTo(X,Y)}c.stroke()});
+for(var j=0;j<=n;j++){var t=tm*j/n,kq=kep(p.k,sim-t),an=-kq[0],r=Math.sqrt(kq[1])*gu,X=gx+Math.cos(an)*r-dr*t,Y=gy+Math.sin(an)*r;j?c.lineTo(X,Y):c.moveTo(X,Y)}c.stroke()});
 g=c.createLinearGradient(gx,0,0,0);g.addColorStop(0,"rgba(255,190,80,.55)");g.addColorStop(1,"rgba(255,190,80,0)");
 c.strokeStyle=g;c.lineWidth=2/sq;c.beginPath();c.moveTo(gx,gy);c.lineTo(0,gy);c.stroke();
 g=c.createRadialGradient(gx,gy,sr*.2,gx,gy,sr*4.5);
@@ -85,7 +96,8 @@ if(z<2&&W>560){c.font="13px Instrument Sans,sans-serif";c.textAlign="center";c.f
 var s=P[sel];c.textAlign="left";c.fillStyle=s.col;c.font="800 26px Fraunces,Georgia,serif";c.fillText(s.n,14,32);
 c.fillStyle="rgba(220,226,255,.8)";c.font="13px Instrument Sans,sans-serif";c.fillText(s.v[0][0]+": "+s.v[0][1],14,52);c.fillText(s.v[1][0]+": "+s.v[1][1],14,70);
 c.fillStyle="rgba(220,226,255,.5)";c.textAlign="center";c.fillText("‹  sağa / sola kaydır  ›",W/2,H-10);
-var y=days/365.25;$("clock").textContent=y<1?Math.round(days)+" gün geçti":y.toFixed(1).replace(".",",")+" Dünya yılı geçti";
+var y=days/365.25,ck=fd.format(new Date(J2K+sim*864e5))+" · "+(days<.5?"bugün":y<1?"+"+Math.round(days)+" gün":"+"+y.toFixed(1).replace(".",",")+" yıl");
+if(ck!==lck){lck=ck;$("clock").textContent=ck}
 requestAnimationFrame(draw)}
 function pick(e){var rc=cv.getBoundingClientRect(),mx=e.clientX-rc.left,my=e.clientY-rc.top,best=-1,bd=34;
 P.forEach(function(p,i){var q=p.a?pos(p):[gx,gy],d=Math.max(0,Math.hypot(W/2+(q[0]-cam[0])*z-mx,H/2+(q[1]-cam[1])*z-my)-p.rd*z);if(d<bd){bd=d;best=i}});if(best>=0)show(best)}
@@ -135,6 +147,9 @@ c=i===5?mx([150,92,58],[242,222,192],bd):mx([205,172,112],[246,232,192],bd*.8+.1
 n=fb(X*6,Y*1.5,Z*6,2);c=mx(c,[255,245,225],(n-.6)*1.2);
 if(i===5){var dx=Math.atan2(Math.sin(lo-1),Math.cos(lo-1)),dy=la+.33,e=dx*dx/.08+dy*dy/.012;if(e<1)c=mx(c,[188,64,36],(1-e)*1.4)}break;
 case 7:n=fb(X*1.5,Y*3,Z*1.5,3);c=mx([104,196,204],[168,234,238],n*1.1+Math.sin(la*6)*.1);break;
+case 9:n=fb(X*3,Y*3,Z*3,4);c=mx([142,104,80],[226,206,182],n*1.3-.15);
+if(Math.abs(la)<.45){n=fb(X*4+5,Y*4,Z*4,3);c=mx(c,[84,44,34],(n-.45)*2.4*(1-Math.abs(la)/.45))}
+var hx=Math.atan2(Math.sin(lo-2.2),Math.cos(lo-2.2)),hy=la-.25;var hq=Math.min((hx+.1)*(hx+.1)/.06+hy*hy/.1,(hx-.16)*(hx-.16)/.04+(hy-.04)*(hy-.04)/.06)+(fb(X*9,Y*9,Z*9,2)-.5)*.5;if(hq<1)c=mx(c,[238,228,212],(1-hq)*2.2*.85);break;
 default:n=fb(X*2,Y*3,Z*2,3);c=mx([26,56,184],[70,112,244],Math.sin(la*7+n*3)*.35+.5);n=fb(X*5,Y*1.2,Z*5,3);if(n>.95)c=mx(c,[225,235,255],(n-.95)*3)}
 var k=(v*TW+u)*4;d[k]=c[0];d[k+1]=c[1];d[k+2]=c[2];d[k+3]=255}}
 return d}
@@ -202,4 +217,28 @@ var sk=$("sky"),x=sk.getContext("2d"),st=[],SW,SH;
 function rs(){SW=sk.width=innerWidth;SH=sk.height=innerHeight;st=[];for(var i=0;i<Math.min(260,SW*SH/5200);i++){var d=Math.random();st.push({x:Math.random()*SW,y:Math.random()*SH,d:d,r:d*1.2+.2,t:Math.random()*6.3,v:Math.random()*.02+.005})}}
 function ds(){x.clearRect(0,0,SW,SH);var sy=window.pageYOffset||0;st.forEach(function(s){s.t+=s.v;var y=((s.y-sy*s.d*.3)%SH+SH)%SH;x.fillStyle="rgba(233,236,255,"+((.25+.5*s.d)*(.7+.3*Math.sin(s.t))).toFixed(2)+")";x.beginPath();x.arc(s.x,y,s.r,0,6.283);x.fill()});if(!mo)requestAnimationFrame(ds)}
 addEventListener("resize",function(){rs();if(mo)ds()});rs();ds();
+var nf=new Intl.NumberFormat("tr-TR"),t0=Date.now(),hero=document.querySelector(".hero"),hv=true;
+function tele(){if(!hv||document.hidden)return;var q=kep(EL[3],(Date.now()-J2K)/864e5),r=q[1]*AU,v=Math.sqrt(GM*(2/r-1/(EL[3][0]*AU)));
+$("t-r").textContent="≈ "+nf.format(Math.round(r))+" km";$("t-v").textContent=v.toFixed(3).replace(".",",")+" km/sn";$("t-s").textContent=nf.format(Math.round(v*(Date.now()-t0)/1000))+" km"}
+if("IntersectionObserver" in window)new IntersectionObserver(function(en){hv=en[0].isIntersecting;tele()}).observe(hero);
+tele();setInterval(tele,mo?1000:100);
+if(!mo)addEventListener("scroll",function(){var y=window.pageYOffset||0;if(y<innerHeight*1.2)hero.style.setProperty("--hy",(y*.35).toFixed(1)+"px")},{passive:true});
+var jt=$("jt");if(jt){
+var jw=$("jw"),JMAX=30.45,ja=0,jg=0,jr=0,ppa=1,
+DI=[1391000,4879,12104,12742,6779,139820,116460,50724,49244],
+JM=[[.2,"Merkür'e doğru. Işık bile bu yolu 3 dakikada alıyor."],[2.75,"Asteroit kuşağı. Filmlerdekinin aksine, iki asteroit arasında ortalama 1 milyon km'den fazla boşluk var."],[4,"Hâlâ yoldasın. Güneş Sistemi'nin hacminin neredeyse tamamı boşluk."],[7.4,"Voyager 1 bu noktayı fırlatılışından yaklaşık 3 yıl sonra geçti."],[14.5,"Satürn ile Uranüs arası, Güneş ile Satürn arasından daha uzun."],[24.5,"Voyager 2 Neptün'e 12 yılda ulaştı. Sen birkaç dakikada geldin."],[30.45,"Yolun sonu değil. Oort Bulutu'nun iç kenarı bu ölçekte yaklaşık 2.000 ekran genişliği ötede."]];
+document.documentElement.classList.add("jy");
+var JP=P.slice(0,9).map(function(p,i){var a=i?EL[i][0]:0,e=document.createElement("div");e.className="jp"+(i?(i%2?" up":""):" sun");e.style.setProperty("--x",a);e.style.setProperty("--c",p.col);
+e.innerHTML='<i></i><b>'+p.n+'</b><span>'+(i?a.toFixed(2).replace(".",",")+" AB":"")+'<em></em></span>';jw.appendChild(e);return[e.querySelector("em"),DI[i],e.querySelector("i")]});
+JM.forEach(function(m){var e=document.createElement("p");e.className="jmsg";e.style.setProperty("--x",m[0]);e.textContent=m[1];jw.appendChild(e)});
+$("jmt").innerHTML=P.slice(0,9).map(function(p,i){return'<i style="left:'+(i?EL[i][0]:0)/JMAX*100+'%;background:'+p.col+'"></i>'}).join("")+P.slice(5,9).map(function(p,i){return'<span style="left:'+EL[i+5][0]/JMAX*100+'%">'+p.n+"</span>"}).join("");
+function jsz(){ppa=jt.clientWidth;jw.style.setProperty("--ppa",ppa+"px");JP.forEach(function(x,i){var px=x[1]/AU*ppa,sz=Math.max(3,px);if(!i)x[2].style.cssText="width:"+sz+"px;height:"+sz+"px;left:"+-sz/2+"px;top:"+-sz/2+"px";x[0].textContent="bu ölçekte "+(px<.01?"0,01 pikselden küçük":(px<1?px.toFixed(2):px.toFixed(1)).replace(".",",")+" piksel")});jtg()}
+function jtg(){var r=jt.getBoundingClientRect(),p=Math.max(0,Math.min(1,-r.top/Math.max(1,r.height-innerHeight)));jg=p*JMAX;if(!jr)jr=requestAnimationFrame(jst)}
+function car(a){var y=a*AU/100/8766;return y<1?Math.round(y*365.25)+" gün":nf.format(Math.round(y))+" yıl"}
+function jst(){jr=0;ja=mo?jg:ja+(jg-ja)*.16;if(Math.abs(jg-ja)<1e-4)ja=jg;
+jw.style.transform="translate3d("+(ppa/2-ja*ppa).toFixed(1)+"px,0,0)";
+$("jkm").textContent=nf.format(Math.round(ja*AU));$("jau").textContent=ja.toFixed(2).replace(".",",")+" AB";$("jli").textContent=fmt(ja*499.005);$("jcar").textContent=car(ja);
+$("jmc").style.left=ja/JMAX*100+"%";
+if(ja!==jg)jr=requestAnimationFrame(jst)}
+addEventListener("scroll",jtg,{passive:true});addEventListener("resize",jsz);jsz()}
 })();

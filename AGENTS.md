@@ -5,7 +5,7 @@ Türkçe, tek sayfalık, derleme gerektirmeyen bir statik site. Güneş Sistemi'
 ## Dosyalar
 - `index.html`: sayfa yapısı ve içerik (tüm metinler Türkçe)
 - `style.css`: tüm stiller
-- `script.js`: yörünge modeli (canvas), 3D gezegen (canvas, elle yazılmış), ışık yarışı, lightbox, kaydırma efektleri
+- `script.js`: yörünge modeli (canvas, JPL ortalama yörünge elemanları + Kepler denklemiyle bugünkü gerçek konumlar), 3D gezegen (canvas, elle yazılmış), hero'daki canlı Dünya telemetrisi, gerçek ölçekli kaydırma yolculuğu (#yolculuk), ışık yarışı, lightbox, kaydırma efektleri
 - `webb.jpg`, `hubble.jpg`, `andromeda.jpg`, `hero.jpg`: Webb, Hubble ve GALEX görüntüleri (kök dizinde, klasör yok. Uygun görürsen bir `images/` klasörüne taşıyıp yolları güncelleyebilirsin)
 
 ## Çalıştırma
@@ -20,7 +20,7 @@ Türkçe, tek sayfalık, derleme gerektirmeyen bir statik site. Güneş Sistemi'
 - Görsellerin telif/kaynak notu footer'da tutulmalı.
 
 ## Geliştirme fikirleri
-- Cüce gezegenler (Plüton, Ceres) ve uydular için yörünge modeli
+- Ceres ve uydular için yörünge modeli (Plüton eklendi; Ceres için güvenilir J2000 elemanları gerekli)
 - Gezegenlerin gerçek dokuları (şu an kodla üretiliyor)
 - Performans: Lighthouse skorunu ölç ve iyileştir
 - İngilizce dil seçeneği
